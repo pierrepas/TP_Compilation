@@ -8,18 +8,22 @@ type opUna = Inc | Dec | Opp                        (* Opérateurs Unaires *)
 
 type expr_float =
     | Float of float                                (* Constante *)
-    | Bin of expr_float * opBin * expr_float        (* Opération *)
-    | Una of expr_float * opUna                     (* Opération Unaire *)
+    | F_Bin of expr_float * opBin * expr_float        (* Opération *)
+    | F_Una of expr_float * opUna                     (* Opération Unaire *)
 
 type expr_int =
     | Int of int
-    | Bin of expr_int * opBin * expr_int 
-    | Una of expr_int * opUna
+    | I_Bin of expr_int * opBin * expr_int 
+    | I_Una of expr_int * opUna
+
+type expr =
+    | E_int of expr_int 
+    | E_float of expr_float
 
 type def = { name   : ident;                        (* Nom de la variable *)
-             def    : expr }
+             def    : expr}
 
 type instruction =
-    | def
-    | expr_int
-    | expr_float
+    | Def of def
+    | I_int of expr_int
+    | I_float of expr_float
