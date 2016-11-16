@@ -1,0 +1,86 @@
+#tests simples
+x=2
+x=x+1
+z=x
+f(x) = x+1
+z=f(x)
+y=f(x) * x
+g(x) = x < 0 ? 1 : (x*x)
+z=g(y)
+
+#fibonacci
+fib(n)= n <= 1 ? n : fib(n-1) + fib(n-2)
+tmp=fib(25)
+
+#deux fonctions mutuellement récursives
+h(x,y) = x <= 0 ? y : k(x-y,y)
+k(x,y) = x <= 0 ? y : h(x,y) + 1
+u=h(10,1)
+
+#pgcd
+mod(x,y)=x - (x/y)*y
+abs(x)=x < 0 ? -x : x
+gcd(x,y)=
+  x=abs(x) y=abs(y)
+  x <= y ? gcdaux(x,y) : gcdaux(y,x)
+gcdaux(x,y)=x = 0 ? y : gcdaux(mod(y,x),x)
+
+testgcd1 = gcdaux(42,91)
+testgcd2 = gcdaux(421264322,912356724)
+
+#test fonction utilisant une variable globale
+gy=2
+fg(x) = gy+x
+gg=fg(3)
+
+#test sur les conditionnelles imbriquées
+testtest(x,y)=
+  x = y ? -1 :
+    x <= y ?
+      x <= y - 5 ? 0 : 1
+    : x >= y + 5 ? 2 : 3
+
+testtest1 = testtest(-6,0)
+testtest2 = testtest(-1,0)
+testtest3 = testtest(0,0)
+testtest4 = testtest(1,0)
+testtest5 = testtest(6,0)
+
+#test sur les conditionnelles imbriquées
+testtestb(x,y)=
+  x = y ? -1 :
+    z1 = x - y
+    z2 = y - x
+    x <= y ?
+      x <= y - 5 ? z1 : 1
+    : x >= y + 5 ? z2 : 3
+
+testtestb1 = testtestb(-6,0)
+testtestb2 = testtestb(-1,0)
+testtestb3 = testtestb(0,0)
+testtestb4 = testtestb(1,0)
+testtestb5 = testtestb(6,0)
+
+#factorielle
+fact(n) = n <= 0 ? 1 : n*fact(n-1)
+
+f10=fact(10)
+f20=fact(20)
+f30=fact(30)
+f100=fact(100)
+f1000=fact(1000)
+
+#puissance de deux
+pow(x,y) = y <= 0 ? 1 : x * pow(x,y-1)
+test32 = pow(2,32)
+test   = test32 = 0 ? 0 : 1
+test33 = pow(2,33)
+test   = test33 = 0 ? 0 : 1
+test62 = pow(2,62)
+test   = test62 = 0 ? 0 : 1
+test63 = pow(2,63)
+test   = test63 = 0 ? 0 : 1
+test64 = pow(2,64)
+test   = test64 = 0 ? 0 : 1
+test65 = pow(2,65)
+test   = test65 = 0 ? 0 : 1

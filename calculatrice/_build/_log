@@ -1,0 +1,46 @@
+### Starting build.
+# Target: calc.ml.depends, tags: { extension:ml, file:calc.ml, ocaml, ocamldep, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules calc.ml > calc.ml.depends
+# Target: calc_ast.ml.depends, tags: { extension:ml, file:calc_ast.ml, ocaml, ocamldep, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules calc_ast.ml > calc_ast.ml.depends # cached
+# Target: calc_llvm.ml.depends, tags: { extension:ml, file:calc_llvm.ml, ocaml, ocamldep, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules calc_llvm.ml > calc_llvm.ml.depends
+# Target: calc_ast.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:calc_ast.cmo, file:calc_ast.ml, implem, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_ast.cmo calc_ast.ml
+# Target: llvm.mli.depends, tags: { extension:mli, file:llvm.mli, ocaml, ocamldep, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules llvm.mli > llvm.mli.depends
+# Target: llvm.cmi, tags: { byte, compile, extension:mli, file:llvm.mli, interf, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o llvm.cmi llvm.mli
+# Target: calc_parser.ml.depends, tags: { extension:ml, file:calc_parser.ml, ocaml, ocamldep, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules calc_parser.ml > calc_parser.ml.depends
+# Target: calc_semantics.ml.depends, tags: { extension:ml, file:calc_semantics.ml, ocaml, ocamldep, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules calc_semantics.ml > calc_semantics.ml.depends # cached
+# Target: calc_llvm.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:calc_llvm.cmo, file:calc_llvm.ml, implem, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_llvm.cmo calc_llvm.ml
+# Target: calc_parser.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:calc_parser.cmo, file:calc_parser.ml, implem, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_parser.cmo calc_parser.ml
+# Target: calc_semantics.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:calc_semantics.cmo, file:calc_semantics.ml, implem, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_semantics.cmo calc_semantics.ml
+# Target: calc.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:calc.cmo, file:calc.ml, implem, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc.cmo calc.ml
+# Target: calc_ast.cmx, tags: { compile, extension:cmx, extension:ml, file:calc_ast.cmx, file:calc_ast.ml, implem, native, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlopt.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_ast.cmx calc_ast.ml
+# Target: llvm.ml.depends, tags: { extension:ml, file:llvm.ml, ocaml, ocamldep, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules llvm.ml > llvm.ml.depends
+# Target: llvm.cmx, tags: { compile, extension:cmx, extension:ml, file:llvm.cmx, file:llvm.ml, implem, native, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlopt.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o llvm.cmx llvm.ml
+# Target: calc_llvm.cmx, tags: { compile, extension:cmx, extension:ml, file:calc_llvm.cmx, file:calc_llvm.ml, implem, native, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlopt.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_llvm.cmx calc_llvm.ml
+# Target: calc_parser.cmx, tags: { compile, extension:cmx, extension:ml, file:calc_parser.cmx, file:calc_parser.ml, implem, native, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlopt.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_parser.cmx calc_parser.ml
+# Target: calc_semantics.cmx, tags: { compile, extension:cmx, extension:ml, file:calc_semantics.cmx, file:calc_semantics.ml, implem, native, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlopt.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc_semantics.cmx calc_semantics.ml
+# Target: calc.cmx, tags: { compile, extension:cmx, extension:ml, file:calc.cmx, file:calc.ml, implem, native, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlopt.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o calc.cmx calc.ml
+# Target: calc.native, tags: { dont_link_with, extension:native, file:calc.native, link, native, ocaml, program, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlopt.opt -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap /usr/lib/ocaml/unix.cmxa /usr/lib/ocaml/str.cmxa /usr/local/lib/ocaml/4.02.3/decap/decap.cmxa calc_ast.cmx llvm.cmx calc_llvm.cmx calc_parser.cmx calc_semantics.cmx calc.cmx -o calc.native
+# Target: llvm.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:llvm.cmo, file:llvm.ml, implem, ocaml, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o llvm.cmo llvm.ml
+# Target: calc.byte, tags: { byte, dont_link_with, extension:byte, file:calc.byte, link, ocaml, program, quiet }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap unix.cma str.cma decap.cma calc_ast.cmo llvm.cmo calc_llvm.cmo calc_parser.cmo calc_semantics.cmo calc.cmo -o calc.byte
+# Compilation successful.
