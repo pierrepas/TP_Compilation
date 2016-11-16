@@ -24,6 +24,10 @@ type def = { name   : ident;                        (* Nom de la variable *)
              def    : expr}
 
 type instruction =
-    | Def of def
+    | Def of ident * expr
     | I_int of expr_int
     | I_float of expr_float
+
+type programme =
+    | Inst of instruction
+    | Programme of instruction * programme
