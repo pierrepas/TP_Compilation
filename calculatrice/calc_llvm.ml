@@ -3,12 +3,13 @@ open Llvm
 
 (* choix du type pour les nombres manipulés par la calculatrice,
    il suffit de changer ces deux lignes pour changer la taille des entiers *)
-let calc_type = Int 64 and type_format = "%lld"
+let int_size = 64
+let calc_type = Int int_size and type_format = "%lld"
 
 (* compilation des opérations binaires *)
 let rec bin_to_llvm (env:env) (op:opBin) (e1:expr) (e2:expr) : value =
   let instr = match op with
-    | Add -> "add" | Sub -> "sub" | Mul -> "mul" | div -> "sdiv" in
+    | Add -> LL_add | Sub -> LL_sub | Mul -> LL_mul | div -> LL_sdiv in
   let e1 = expr_to_llvm env e1 in
   let e2 = expr_to_llvm env e2 in
   emit_op_bin env instr e1 e2
@@ -22,14 +23,14 @@ and expr_to_llvm_with_label (env:env) (e:expr) : value * value =
 
 (* compilation d'une expression *)
 and expr_to_llvm (env:env) : expr -> value = function
-  | Int n -> { ty = calc_type; access = string_of_int n }
+  | Int n -> (int_cst int_size n)
   | Bin (e1, op, e2) -> bin_to_llvm env op e1 e2
   | Opp e1 -> bin_to_llvm env Sub (Int 0) e1
   (* compilation d'une définition locale, emit_in_scope est
      fait pour ça *)
   | Def(name,e1,e2) ->
     let e1 = expr_to_llvm env e1 in
-    emit_in_scope env [(name, e1)] (fun () ->
+    emit_in_scope env [(ident name, e1)] (fun () ->
       expr_to_llvm env e2)
 
   | If(e0,p,e0',e1,e2) ->
@@ -37,8 +38,8 @@ and expr_to_llvm (env:env) : expr -> value = function
     let e0 = expr_to_llvm env e0 in
     let e0' = expr_to_llvm env e0' in
     let p = match p with
-      | Geq -> "sge" | Ge -> "sgt" | Ne -> "ne"
-      | Leq -> "sle" | Le -> "slt" | Eq -> "eq"
+      | Geq -> LL_sge | Ge -> LL_sgt | Ne -> LL_ne
+      | Leq -> LL_sle | Le -> LL_slt | Eq -> LL_eq
     in
     let cmp = emit_icmp env p e0 e0' in
     (* on a besoin de trois blocs: cas vrai, cas faux et
@@ -63,29 +64,29 @@ and expr_to_llvm (env:env) : expr -> value = function
   | Call(id,es) ->
     if es = [] then
       try
-        (* cas sans argument, variable locale, on a la valeur llvm
+	(* cas sans argument, variable locale, on a la valeur llvm
            dans l'environnement local *)
-        search_local env id
+	search_local env (ident id)
       with Not_found -> try
-        (* cas sans argument, variable globale, on a l'adresse llvm
-           dans l'environnement global, il faut un store en plus *)
-        let g = search_global (get_global env) id in
-        emit_load env g
+	(* cas sans argument, variable globale, on a l'adresse llvm
+	   dans l'environnement global, il faut un store en plus *)
+	let g = search_global (get_global env) (global id) in
+	emit_load env g
       with Not_found ->
-        failwith ("Unbound variable: "^id)
+	failwith ("Unbound variable: "^id)
     else
       try
-        (* il y a des arguments, on cherche la fonction dans l'environnement global
-           et on construit le call, si le nombre d'argument est le bon *)
-        let fn = search_global (get_global env) id in
-        let arity, _ = fun_arity fn in
-        if List.length es <> arity then
-          failwith (Printf.sprintf "Using function %s with %d arguments (%d required)"
-                      fn.access (List.length es) arity);
-        let args = List.map (fun e -> expr_to_llvm env e) es in
-        emit_call env fn args
+	(* il y a des arguments, on cherche la fonction dans l'environnement global
+	   et on construit le call, si le nombre d'argument est le bon *)
+	let fn = search_global (get_global env) (global id) in
+	let arity, _ = fun_arity fn in
+	if List.length es <> arity then
+	  failwith (Printf.sprintf "Using function %s with %d arguments (%d required)"
+		      fn.access (List.length es) arity);
+	let args = List.map (fun e -> expr_to_llvm env e) es in
+	emit_call env fn args
       with Not_found ->
-        failwith ("Unbound function: "^id)
+	failwith ("Unbound function: "^id)
 
 (* compilation d'une définition, deux cas: variable globale ou fonction *)
 let def_to_llvm genv def =
@@ -93,25 +94,26 @@ let def_to_llvm genv def =
   if arity = 0 then begin (* cas d'une déclaration de variable *)
     let globale, printf_cste =
       try (* On regarde si elle et une constante pour le printf sont déjà déclarées *)
-        let globale = search_global genv def.name in
-        let printf_cste = search_global genv (def.name^"__printf_constant") in
-        globale, printf_cste
+	let globale = search_global genv (global def.name) in
+	let printf_cste = search_global genv (global (def.name^"__printf_constant")) in
+	globale, printf_cste
       with Not_found -> (* sinon on les déclare *)
-        let globale = declare_global genv def.name (calc_type) "0" in
-        let printf_str = Printf.sprintf "%s = %s\n" def.name type_format in
-        let printf_cste = declare_string_constant genv (def.name^"__printf_constant") printf_str in
-        globale, printf_cste
+	let globale = declare_global genv (global def.name) (calc_type) "0" in
+	let printf_str = Printf.sprintf "%s = %s\n" def.name type_format in
+	let printf_cste = declare_string_constant genv
+          (global (def.name^"__printf_constant")) printf_str in
+	globale, printf_cste
     in
     (* on emet maintenant le code affectant la variable globale dans le "main" *)
     let env = start_init_code genv in
     let r = expr_to_llvm env def.def in
     emit_store env r globale;
-    let printf = try search_global genv "@printf" with Not_found -> assert false in
+    let printf = try search_global genv (global "printf") with Not_found -> assert false in
     let _ = emit_call env printf [printf_cste; r] in
     end_init_code env
   end else begin
     (* pour les fonctions, on a juste à emmettre le code, en cherchant le  *)
-    let env = start_function genv def.name in
+    let env = start_function genv (global def.name) in
     let r = expr_to_llvm env def.def in
     emit_ret env r;
     end_function env
@@ -119,13 +121,13 @@ let def_to_llvm genv def =
 
 let register_function genv def =
   if def.params <> [] then
-    let arg_types = List.map (fun name -> (name, calc_type)) def.params in
-    let _ = register_function genv def.name calc_type arg_types in
+    let arg_types = List.map (fun name -> (ident name, calc_type)) def.params in
+    let _ = register_function genv (global def.name) calc_type arg_types in
     ()
 
 let compile_to_llvm defs =
   let genv = start_emit_file () in
-  let _ = declare_extern genv "@printf" (Int 32) ~var_args:true [Ptr (Int 8)] in
+  let _ = declare_extern genv (global "printf") (Int 32) ~var_args:true [Ptr (Int 8)] in
   List.iter (register_function genv) defs;
   List.iter (def_to_llvm genv) defs;
   end_emit_file genv stdout

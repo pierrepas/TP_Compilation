@@ -1,11 +1,13 @@
 #!/bin/sh
 
+LLC=llc
+
 # compile le test de la sémantique de la calculatrice, en bytecode
 # (calc_test_sem.byte)
 echo ========================
 echo  Compilation test
 echo ========================
-ocamlbuild -pp pa_ocaml calc_test_sem.byte
+ocamlbuild -j 4 -pp pa_ocaml calc_test_sem.byte || exit 1
 
 # execute le test
 echo ========================
@@ -18,7 +20,7 @@ echo ========================
 echo ========================
 echo  Compilation complète
 echo ========================
-ocamlbuild -pp pa_ocaml -pkgs decap calc.native calc.byte
+ocamlbuild -j 4 -pp pa_ocaml -pkgs earley,earley.str,unix calc.native calc.byte || exit 1
 
 # execute l'exemple
 echo ========================
@@ -30,10 +32,10 @@ echo ========================
 echo ========================
 echo    Test compilateur
 echo ========================
-./calc.native -c < calc_tests/test.txt > calc_tests/test.ll
-llc -march=x86-64 calc_tests/test.ll
-as -c calc_tests/test.s -o calc_tests/test.o
-gcc calc_tests/test.o -o calc_tests/test.exe
+./calc.native -c < calc_tests/test.txt > calc_tests/test.ll || exit 1
+$LLC -march=x86-64 -relocation-model=pic calc_tests/test.ll || exit 1
+as -march=core2 --64 -c calc_tests/test.s -o calc_tests/test.o || exit 1
+gcc -march=core2 -m64 calc_tests/test.o -o calc_tests/test.exe || exit 1
 
 # execute l'exemple
 calc_tests/test.exe
