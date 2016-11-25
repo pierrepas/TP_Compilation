@@ -1,8 +1,15 @@
 ### Starting build.
+# Target: evaluateur.ml.depends, tags: { extension:ml, file:evaluateur.ml, ocaml, ocamldep, quiet, traverse }
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -modules evaluateur.ml > evaluateur.ml.depends
 # Target: ast.ml.depends, tags: { extension:ml, file:ast.ml, ocaml, ocamldep, quiet, traverse }
-/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -pp pa_ocaml -modules ast.ml > ast.ml.depends # cached
+/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -modules ast.ml > ast.ml.depends
 # Target: ast.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:ast.cmo, file:ast.ml, implem, ocaml, quiet, traverse }
-/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o ast.cmo ast.ml # cached
-# Target: ast.byte, tags: { byte, dont_link_with, extension:byte, file:ast.byte, link, ocaml, program, quiet, traverse }
-/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap unix.cma str.cma decap.cma ast.cmo -o ast.byte # cached
-# Compilation successful.
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -o ast.cmo ast.ml
+# Target: evaluateur.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:evaluateur.cmo, file:evaluateur.ml, implem, ocaml, quiet, traverse }
+/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -o evaluateur.cmo evaluateur.ml
++ /home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -o evaluateur.cmo evaluateur.ml
+File "evaluateur.ml", line 13, characters 6-9:
+Error: This variant pattern is expected to have type Ast.programme
+       The constructor Int does not belong to type list
+Command exited with code 2.
+# Compilation unsuccessful.

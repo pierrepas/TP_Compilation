@@ -6,28 +6,24 @@ type opUna = Inc | Dec | Opp                        (* Opérateurs Unaires *)
 
 (* On sépare les expressions par types *)
 
-type expr_float =
-    | Float of float                                (* Constante *)
-    | F_Bin of expr_float * opBin * expr_float        (* Opération *)
-    | F_Una of expr_float * opUna                     (* Opération Unaire *)
-
-type expr_int =
-    | Int of int
-    | I_Bin of expr_int * opBin * expr_int 
-    | I_Una of expr_int * opUna
-
 type expr =
-    | E_int of expr_int 
-    | E_float of expr_float
+    | Float of float                                (* Constante *)
+    | Bin of expr * opBin * expr        (* Opération *)
+    | Una of expr * opUna                     (* Opération Unaire *)
+    | Int of int
+    | Var of ident
+
+type valeur =
+	| V_Int of int
+	| V_Float of float
 
 type def = { name   : ident;                        (* Nom de la variable *)
              def    : expr}
 
 type instruction =
     | Def of ident * expr
-    | I_int of expr_int
-    | I_float of expr_float
+    | Expr of expr
 
-type programme =
-    | Inst of instruction
-    | Programme of instruction * programme
+type env = def list
+
+type programme = instruction list
