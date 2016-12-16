@@ -1,15 +1,20 @@
 ### Starting build.
-# Target: evaluateur.ml.depends, tags: { extension:ml, file:evaluateur.ml, ocaml, ocamldep, quiet, traverse }
-/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -modules evaluateur.ml > evaluateur.ml.depends # cached
+# Target: main.ml.depends, tags: { extension:ml, file:main.ml, ocaml, ocamldep, quiet, traverse }
+/usr/bin/ocamldep -pp pa_ocaml -modules main.ml > main.ml.depends # cached
 # Target: ast.ml.depends, tags: { extension:ml, file:ast.ml, ocaml, ocamldep, quiet, traverse }
-/home/neuromancer/.opam/4.02.3/bin/ocamldep.opt -modules ast.ml > ast.ml.depends # cached
+/usr/bin/ocamldep -pp pa_ocaml -modules ast.ml > ast.ml.depends # cached
 # Target: ast.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:ast.cmo, file:ast.ml, implem, ocaml, quiet, traverse }
-/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -o ast.cmo ast.ml # cached
+/usr/bin/ocamlc -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o ast.cmo ast.ml # cached
+# Target: evaluateur.ml.depends, tags: { extension:ml, file:evaluateur.ml, ocaml, ocamldep, quiet, traverse }
+/usr/bin/ocamldep -pp pa_ocaml -modules evaluateur.ml > evaluateur.ml.depends # cached
 # Target: evaluateur.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:evaluateur.cmo, file:evaluateur.ml, implem, ocaml, quiet, traverse }
-/home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -o evaluateur.cmo evaluateur.ml
-+ /home/neuromancer/.opam/4.02.3/bin/ocamlc.opt -c -o evaluateur.cmo evaluateur.ml
-File "evaluateur.ml", line 13, characters 6-9:
-Error: This variant pattern is expected to have type Ast.programme
-       The constructor Int does not belong to type list
-Command exited with code 2.
-# Compilation unsuccessful.
+/usr/bin/ocamlc -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o evaluateur.cmo evaluateur.ml # cached
+# Target: parseur.ml.depends, tags: { extension:ml, file:parseur.ml, ocaml, ocamldep, quiet, traverse }
+/usr/bin/ocamldep -pp pa_ocaml -modules parseur.ml > parseur.ml.depends
+# Target: parseur.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:parseur.cmo, file:parseur.ml, implem, ocaml, quiet, traverse }
+/usr/bin/ocamlc -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o parseur.cmo parseur.ml
+# Target: main.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:main.cmo, file:main.ml, implem, ocaml, quiet, traverse }
+/usr/bin/ocamlc -c -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap -pp pa_ocaml -o main.cmo main.ml # cached
+# Target: main.byte, tags: { byte, dont_link_with, extension:byte, file:main.byte, link, ocaml, program, quiet, traverse }
+/usr/bin/ocamlc -I /usr/lib/ocaml -I /usr/local/lib/ocaml/4.02.3/decap unix.cma str.cma decap.cma ast.cmo evaluateur.cmo parseur.cmo main.cmo -o main.byte
+# Compilation successful.

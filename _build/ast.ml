@@ -18,7 +18,7 @@ type valeur =
 	| V_Float of float
 
 type def = { name   : ident;                        (* Nom de la variable *)
-             def    : expr}
+             def    : valeur}
 
 type instruction =
     | Def of ident * expr
